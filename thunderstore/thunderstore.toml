@@ -5,7 +5,7 @@ schemaVersion = "0.0.1"
 # The name of the team you are publishing as
 namespace = "danielstegink"
 # max 250 characters
-description = "Adds scavenging mechanic for shards, rosaries and Silk"
+description = "Adds combat synergies between the Needolin and tools"
 
 # Replace this with a correct repo URL if the default is not accurate
 websiteUrl = "https://github.com/danielstegink/Silksong.NeedolinArsenal"
