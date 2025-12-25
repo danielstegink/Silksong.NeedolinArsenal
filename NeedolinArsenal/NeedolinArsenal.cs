@@ -6,6 +6,7 @@ using NeedolinArsenal.Helpers;
 namespace NeedolinArsenal;
 
 [BepInAutoPlugin(id: "io.github.danielstegink.needolinarsenal")]
+[BepInDependency("io.github.danielstegink.customneedolin", BepInDependency.DependencyFlags.SoftDependency)]
 public partial class NeedolinArsenal : BaseUnityPlugin
 {
     internal static NeedolinArsenal Instance { get; private set; }
@@ -25,7 +26,7 @@ public partial class NeedolinArsenal : BaseUnityPlugin
         MusicToolHelper.metalClip = GetAudioClip.GetAudioClipFromAssembly("NeedolinArsenal", "NeedolinArsenal.Resources.Leader (Zambolino).wav");
         if (MusicToolHelper.shimasenClip == null)
         {
-            Log("Clips not loaded successfully");
+            Log("Audio clips not loaded successfully");
         }
 
         Logger.LogInfo($"Plugin {Name} ({Id}) has loaded!");

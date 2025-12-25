@@ -6,7 +6,7 @@ using DanielSteginkUtils.ExternalFiles;
 namespace NeedolinArsenal.Helpers
 {
     [HarmonyPatch(typeof(GameManager), "Awake")]
-    public static class GameStartPatch
+    public static class GameStart_Awake
     {
         [HarmonyPostfix]
         public static void Postfix(GameManager __instance)

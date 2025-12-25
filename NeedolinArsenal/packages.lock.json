@@ -20,9 +20,9 @@
       },
       "DanielSteginkUtils": {
         "type": "Direct",
-        "requested": "[3.0.0, )",
-        "resolved": "3.0.0",
-        "contentHash": "2/WmdpWfpRxSLo/5A6FuvRl4r+SDaj21MHs30BtHboaf7HurJ1YpDibNwOKiL+FqJ0N8bg4hBD8iaeJOEQF7pQ==",
+        "requested": "[4.1.0, )",
+        "resolved": "4.1.0",
+        "contentHash": "h21cltSFEiIrwX0QYfqT7+BXxI98E1v4fD2PTnbeGXkMjqTqvlNyi5cpi/Waf2Ao3HsSrWxaLGOiElaD/ZawHQ==",
         "dependencies": {
           "BepInEx.Core": "5.4.21",
           "HarmonyX": "2.9.0",
@@ -57,6 +57,12 @@
         "requested": "[*-*, )",
         "resolved": "1.2.0-silksong1.0.29315",
         "contentHash": "MwcUC0FMUn7aCwYHWgQegOBxNGgNBDie9nfg0GeodqbnfrHOjUZ06sZjq+0Iiz9/WBL8yd511YZujFS91FgVMw=="
+      },
+      "UnityEngine.Modules": {
+        "type": "Direct",
+        "requested": "[6000.0.50, )",
+        "resolved": "6000.0.50",
+        "contentHash": "hEFz1r4NGzeYXPY2yPh+/btcnwVB6EnEeRjDMCVNi19PD7VvRMvJeu46x1dNH9jYkT0B/ZXuyMBYiuI7YlRnKw=="
       },
       "BepInEx.BaseLib": {
         "type": "Transitive",
@@ -384,11 +390,6 @@
           "Microsoft.NETCore.Targets": "1.1.0",
           "System.Runtime": "4.3.0"
         }
-      },
-      "UnityEngine.Modules": {
-        "type": "Transitive",
-        "resolved": "6000.0.50",
-        "contentHash": "hEFz1r4NGzeYXPY2yPh+/btcnwVB6EnEeRjDMCVNi19PD7VvRMvJeu46x1dNH9jYkT0B/ZXuyMBYiuI7YlRnKw=="
       },
       "WavLib": {
         "type": "Transitive",

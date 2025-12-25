@@ -1,6 +1,7 @@
 ﻿using DanielSteginkUtils.Helpers;
 using DanielSteginkUtils.Utilities;
 using GlobalEnums;
+using GlobalSettings;
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
 using System;
@@ -40,7 +41,8 @@ namespace NeedolinArsenal.Helpers
         /// </summary>
         internal static void StartArsenal()
         {
-            if (!isArsenalActive)
+            if (!isArsenalActive &&
+                MusicToolHelper.chosenTool != null)
             {
                 isArsenalActive = true;
                 continueArsenal = true;
@@ -57,9 +59,20 @@ namespace NeedolinArsenal.Helpers
             Stopwatch timer = Stopwatch.StartNew();
             while (continueArsenal)
             {
+                if (GameManager.instance.isPaused)
+                {
+                    continue;
+                }
+
                 try
                 {
-                    if (timer.ElapsedMilliseconds >= 1000)
+                    float cooldownTime = 1000f;
+                    if (Gameplay.MusicianCharmTool.IsEquipped)
+                    {
+                        cooldownTime /= 1.2f;
+                    }
+
+                    if (timer.ElapsedMilliseconds >= cooldownTime)
                     {
                         switch (MusicToolHelper.chosenTool)
                         {
@@ -104,7 +117,10 @@ namespace NeedolinArsenal.Helpers
         /// </summary>
         private static void GainLifeblood()
         {
-            EventRegister.SendEvent(EventRegisterEvents.AddBlueHealth);
+            if (PlayerData.instance.GetInt("healthBlue") < Constants.MAX_BLUE_HEALTH - 1)
+            {
+                EventRegister.SendEvent(EventRegisterEvents.AddBlueHealth);
+            }
         }
 
         /// <summary>
@@ -128,7 +144,7 @@ namespace NeedolinArsenal.Helpers
             }
 
             // Randomly spawn the beam in 1 of 5 locations
-            int random = UnityEngine.Random.RandomRangeInt(-2, 3);
+            int random = UnityEngine.Random.Range(-2, 3);
             Transform hcTransform = HeroController.instance.transform;
             Vector3 position = new Vector3()
             {

@@ -1,48 +1,28 @@
 ﻿using HarmonyLib;
 using HutongGames.PlayMaker;
-using HutongGames.PlayMaker.Actions;
-using ScavengerOfPharloom.Helpers;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace NeedolinArsenal.Helpers
 {
     [HarmonyPatch(typeof(FsmState), "OnEnter")]
-    public static class FsmStatePatch
+    public static class FsmState_OnEnter
     {
         [HarmonyPostfix]
         public static void Postfix(FsmState __instance)
         {
-            //if (__instance.Fsm.Name.Equals("FSM"))
-            //{
-            //    NeedolinArsenal.Instance.Log($"Entering FSM state {__instance.Name}");
-            //}
-
-            // Make sure we're in the correct state and
-            // that there is reason to believe the needolin must reset
-            if (StartNeedolinAudioLoopPatch.defaultClip != null &&
-                __instance.Name.Equals("Fast Travel Check"))
-            {
-                // Verify the target state exists, just in case there's another FSM with a Fast Travel Check state
-                FsmState state = __instance.Fsm.GetState("Start Needolin Proper");
-                if (state != null)
-                {
-                    //NeedolinArsenal.Instance.Log("Resetting AudioClip from start of chain");
-                    StartNeedolinAudioLoop action = (StartNeedolinAudioLoop)state.Actions[6];
-                    action.DefaultClip.Value = StartNeedolinAudioLoopPatch.defaultClip;
-                }
-            }
-
             // If we stop playing the regular Needolin, stop the arsenal
             if (StopArsenal(__instance.Name))
             {
+                //PrintAudioSources();
                 ArsenalEffects.continueArsenal = false;
-                //NeedolinArsenal.Instance.Log("Ending default needolin");
+                NeedolinArsenal.Instance.Log("Ending default needolin");
             }
 
             // If we start playing the regular Needolin again, restart the arsenal
             if (RestartArsenal(__instance.Name))
             {
-                //NeedolinArsenal.Instance.Log("Re-enabling effects loop");
+                NeedolinArsenal.Instance.Log("Re-enabling effects loop");
                 ArsenalEffects.StartArsenal();
             }
         }
@@ -85,6 +65,33 @@ namespace NeedolinArsenal.Helpers
             };
 
             return restartStates.Contains(stateName);
+        }
+
+        private static void PrintAudioSources()
+        {
+            NeedolinArsenal.Instance.Log("All audio sources");
+            AudioSource[] audioSources = UnityEngine.Object.FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
+            foreach (AudioSource audioSource in audioSources)
+            {
+                string name = audioSource.name;
+                GameObject? gameObject = audioSource.gameObject;
+                while (gameObject != null)
+                {
+                    name = $@"{gameObject.name}\{name}";
+
+                    Transform parent = gameObject.transform.parent;
+                    if (parent != null)
+                    {
+                        gameObject = gameObject.transform.parent.gameObject;
+                    }
+                    else
+                    {
+                        gameObject = null;
+                    }
+                }
+
+                NeedolinArsenal.Instance.Log($"{name}");
+            }
         }
     }
 }

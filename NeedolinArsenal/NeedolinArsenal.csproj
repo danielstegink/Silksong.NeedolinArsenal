@@ -25,6 +25,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description></Description>
     <RepositoryUrl></RepositoryUrl>
+    <!--<DllPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed</DllPath>-->
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\*" />
@@ -32,19 +33,51 @@
   <ItemGroup>
     <PackageReference Include="BepInEx.Analyzers" Version="1.0.8" PrivateAssets="all" />
     <PackageReference Include="BepInEx.Core" Version="5.4.21" />
-    <PackageReference Include="DanielSteginkUtils" Version="3.0.0" />
     <PackageReference Include="HarmonyX" Version="2.9.0" />
     <PackageReference Include="Hamunii.BepInEx.AutoPlugin" Version="2.1.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Unity.Analyzers" Version="1.25.0" PrivateAssets="all" />
-    <PackageReference Include="Silksong.GameLibs" Version="*-*" PrivateAssets="all" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(DllPath)' == ''">
+    <PackageReference Include="Silksong.GameLibs" Version="*-*" Publicize="false" />
+    <PackageReference Include="UnityEngine.Modules" Version="6000.0.50" IncludeAssets="compile" Publicize="false" />
+    <PackageReference Include="DanielSteginkUtils" Version="4.1.0" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(DllPath)' != ''">
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(DllPath)\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="PlayMaker">
+      <HintPath>$(DllPath)\PlayMaker.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>$(DllPath)\UnityEngine.AudioModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(DllPath)\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(DllPath)\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Physics2DModule">
+      <HintPath>$(DllPath)\UnityEngine.Physics2DModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>$(DllPath)\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
+    <Reference Include="DanielSteginkUtils">
+      <HintPath>..\..\..\..\..\AppData\Roaming\r2modmanPlus-local\HollowKnightSilksong\profiles\Default\BepInEx\plugins\danielstegink-DanielSteginkUtils\DanielSteginkUtils.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="../README.md" Pack="True" PackagePath="README.md" />
-    <None Include="../thunderstore/icon.png" Pack="True" PackagePath="icon.png" />
-    <None Include="..\.github\workflows\build-publish.yml" Link="build-publish.yml" />
-    <None Include="..\CHANGELOG.md" Link="CHANGELOG.md" />
-    <None Include="..\Directory.Build.props" Link="Directory.Build.props" />
-    <None Include="..\thunderstore\thunderstore.toml" Link="thunderstore.toml" />
+    <None Include="../README.md" Pack="True" PackagePath="README.md" Link="Deployment\README.md" />
+    <None Include="../thunderstore/icon.png" Pack="True" PackagePath="icon.png" Link="Deployment\icon.png" />
+    <None Include="..\.github\workflows\build-publish.yml" Link="Deployment\build-publish.yml" />
+    <None Include="..\CHANGELOG.md" Link="Deployment\CHANGELOG.md" />
+    <None Include="..\Directory.Build.props" Link="Deployment\Directory.Build.props" />
+    <None Include="..\thunderstore\thunderstore.toml" Link="Deployment\thunderstore.toml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Deployment\" />
   </ItemGroup>
   <Target Name="CopyAndPackageMod" AfterTargets="PostBuildEvent">
     <ItemGroup>
