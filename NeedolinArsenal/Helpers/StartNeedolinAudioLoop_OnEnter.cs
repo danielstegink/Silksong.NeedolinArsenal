@@ -31,7 +31,7 @@ namespace NeedolinArsenal.Helpers
                 if (Needolin.NeedolinFsm != null && 
                     Needolin.DefaultClip != null)
                 {
-                    NeedolinArsenal.Instance.Log("No tools equipped; resetting AudioClip");
+                    //NeedolinArsenal.Instance.Log("No tools equipped; resetting AudioClip");
                     MusicToolHelper.chosenTool = null;
                     Needolin.ResetAudioClip(Needolin.NeedolinFsm, true);
 
@@ -54,7 +54,7 @@ namespace NeedolinArsenal.Helpers
             AudioClip? newClip = MusicToolHelper.GetAudioClip(MusicToolHelper.chosenTool);
             if (newClip != null)
             {
-                Needolin.SetNewAudioClip(__instance.Fsm, newClip, true);
+                Needolin.SetNewAudioClip(__instance.Fsm, newClip);
 
                 //NeedolinArsenal.Instance.Log($"Default clip: {Needolin.DefaultClip.name}");
                 //NeedolinArsenal.Instance.Log($"New default clip: {Needolin.GetDefaultClip(true).name}");

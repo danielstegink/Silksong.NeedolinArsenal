@@ -16,13 +16,13 @@ namespace NeedolinArsenal.Helpers
             {
                 //PrintAudioSources();
                 ArsenalEffects.continueArsenal = false;
-                NeedolinArsenal.Instance.Log("Ending default needolin");
+                //NeedolinArsenal.Instance.Log("Ending default needolin");
             }
 
             // If we start playing the regular Needolin again, restart the arsenal
             if (RestartArsenal(__instance.Name))
             {
-                NeedolinArsenal.Instance.Log("Re-enabling effects loop");
+                //NeedolinArsenal.Instance.Log("Re-enabling effects loop");
                 ArsenalEffects.StartArsenal();
             }
         }
@@ -67,31 +67,31 @@ namespace NeedolinArsenal.Helpers
             return restartStates.Contains(stateName);
         }
 
-        private static void PrintAudioSources()
-        {
-            NeedolinArsenal.Instance.Log("All audio sources");
-            AudioSource[] audioSources = UnityEngine.Object.FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
-            foreach (AudioSource audioSource in audioSources)
-            {
-                string name = audioSource.name;
-                GameObject? gameObject = audioSource.gameObject;
-                while (gameObject != null)
-                {
-                    name = $@"{gameObject.name}\{name}";
+        //private static void PrintAudioSources()
+        //{
+        //    NeedolinArsenal.Instance.Log("All audio sources");
+        //    AudioSource[] audioSources = UnityEngine.Object.FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
+        //    foreach (AudioSource audioSource in audioSources)
+        //    {
+        //        string name = audioSource.name;
+        //        GameObject? gameObject = audioSource.gameObject;
+        //        while (gameObject != null)
+        //        {
+        //            name = $@"{gameObject.name}\{name}";
 
-                    Transform parent = gameObject.transform.parent;
-                    if (parent != null)
-                    {
-                        gameObject = gameObject.transform.parent.gameObject;
-                    }
-                    else
-                    {
-                        gameObject = null;
-                    }
-                }
+        //            Transform parent = gameObject.transform.parent;
+        //            if (parent != null)
+        //            {
+        //                gameObject = gameObject.transform.parent.gameObject;
+        //            }
+        //            else
+        //            {
+        //                gameObject = null;
+        //            }
+        //        }
 
-                NeedolinArsenal.Instance.Log($"{name}");
-            }
-        }
+        //        NeedolinArsenal.Instance.Log($"{name}");
+        //    }
+        //}
     }
 }
