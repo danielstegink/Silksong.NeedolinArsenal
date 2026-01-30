@@ -4,6 +4,7 @@ using GlobalEnums;
 using GlobalSettings;
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
+using Silksong.AssetHelper.ManagedAssets;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -33,7 +34,12 @@ namespace NeedolinArsenal.Helpers
         /// <summary>
         /// Stores the Pinstress X-strike prefab for ease of reference
         /// </summary>
-        internal static GameObject? needlePrefab;
+        internal static ManagedAsset<GameObject>? needlePrefab;
+
+        /// <summary>
+        /// Store the Claw Mirror(s) explosion for ease of reference
+        /// </summary>
+        internal static ManagedAsset<GameObject>? trobbioPrefab;
         #endregion
 
         /// <summary>
@@ -66,7 +72,7 @@ namespace NeedolinArsenal.Helpers
 
                 try
                 {
-                    float cooldownTime = 1000f;
+                    float cooldownTime = GetCooldownTime(MusicToolHelper.chosenTool);
                     if (Gameplay.MusicianCharmTool.IsEquipped)
                     {
                         cooldownTime /= 1.2f;
@@ -90,7 +96,11 @@ namespace NeedolinArsenal.Helpers
                                 break;
                             // Pin Badge - Produce a needle strike effect to damage nearby enemies
                             case MusicTool.PinBadge:
-                                SpawnNeedleStrike();
+                                GameManager.instance.StartCoroutine(SpawnNeedleStrike());
+                                break;
+                            case MusicTool.Trobbio1:
+                            case MusicTool.Trobbio2:
+                                GameManager.instance.StartCoroutine(SpawnFireworks());
                                 break;
                             default: // Null
                                 break;
@@ -109,6 +119,28 @@ namespace NeedolinArsenal.Helpers
 
             //NeedolinArsenal.Instance.Log("Stopping effects loop");
             isArsenalActive = false;
+        }
+
+        /// <summary>
+        /// Gets the cooldown between effects
+        /// </summary>
+        /// <param name="tool"></param>
+        /// <returns></returns>
+        private static float GetCooldownTime(MusicTool? tool)
+        {
+            switch (tool)
+            {
+                case MusicTool.Lifeblood:
+                    return 3000;
+                case MusicTool.Trobbio2:
+                    return 1600;
+                case MusicTool.Trobbio1:
+                    return 2000;
+                case MusicTool.Lantern:
+                    return 1500;
+                default:
+                    return 1000;
+            }
         }
 
         #region Tool Effects
@@ -160,7 +192,7 @@ namespace NeedolinArsenal.Helpers
         /// </summary>
         private static void SpawnWisp()
         {
-            List<GameObject> nearbyEnemies = GetEnemy.GetEnemies(20f);
+            List<GameObject> nearbyEnemies = GetEnemy.GetEnemies(15f);
             if (nearbyEnemies.Count > 0)
             {
                 // Get the Wisp prefab
@@ -178,20 +210,35 @@ namespace NeedolinArsenal.Helpers
         /// <summary>
         /// Pin Badge sharpens Hornet's Silk, turning the loose strands into blades that damage nearby enemies
         /// </summary>
-        private static void SpawnNeedleStrike()
+        private static IEnumerator SpawnNeedleStrike()
         {
-            List<GameObject> nearbyEnemies = GetEnemy.GetEnemies(20f);
+            // Verify the prefab is not null
+            if (needlePrefab == null)
+            {
+                NeedolinArsenal.Instance.Log($"Cross Slash prefab not stored");
+                yield break;
+            }
+
+            // Load the prefab
+            needlePrefab.Load();
+            yield return needlePrefab.Handle;
+            if (needlePrefab.Handle.OperationException != null)
+            {
+                NeedolinArsenal.Instance.Log($"Error loading asset: {needlePrefab.Handle.OperationException}");
+                yield break;
+            }
+
+            // Get a list of enemies within range
+            List<GameObject> nearbyEnemies = GetEnemy.GetEnemies(15f);
             if (nearbyEnemies.Count > 0)
             {
-                // Spawn Cross Slash on random enemy's location
+                // Spawn Cross Slash on a random enemy's location
                 Transform transform = nearbyEnemies.GetRandomElement().transform;
-                Vector3 position = new Vector3()
-                {
-                    x = transform.position.x,
-                    y = transform.position.y,
-                    z = transform.position.z
-                };
-                GameObject tempNeedle = needlePrefab.Spawn(position);
+                GameObject tempNeedle = needlePrefab.InstantiateAsset();
+                tempNeedle.name = "NeedolinArsenal.NeedleStrike";
+                tempNeedle.transform.SetPositionX(transform.position.x);
+                tempNeedle.transform.SetPositionY(transform.position.y);
+                UnityEngine.Object.Destroy(tempNeedle.GetComponent<TestGameObjectActivator>());
 
                 // Edit the new needle's damagers so they hit enemies, not the player
                 GameObject damager1 = tempNeedle.transform.Find("Damager1").gameObject;
@@ -203,6 +250,47 @@ namespace NeedolinArsenal.Helpers
                 damager2.layer = (int)PhysLayers.HERO_ATTACK;
                 damager2.RemoveComponent<DamageHero>();
                 damager2.AddComponent<NeedleStrikeDamage>();
+            }
+        }
+
+        /// <summary>
+        /// Claw Mirror(s) produces firework clouds. The upgraded version spawns them more often.
+        /// </summary>
+        private static IEnumerator SpawnFireworks()
+        {
+            // Verify the prefab is not null
+            if (trobbioPrefab == null)
+            {
+                NeedolinArsenal.Instance.Log($"Trobbio prefab not stored");
+                yield break;
+            }
+
+            // Load the prefab
+            trobbioPrefab.Load();
+            yield return trobbioPrefab.Handle;
+            if (trobbioPrefab.Handle.OperationException != null)
+            {
+                NeedolinArsenal.Instance.Log($"Error loading asset: {trobbioPrefab.Handle.OperationException}");
+                yield break;
+            }
+
+            // Get a list of enemies within range
+            List<GameObject> nearbyEnemies = GetEnemy.GetEnemies(15f);
+            if (nearbyEnemies.Count > 0)
+            {
+                // Spawn on a random enemy's location
+                Transform transform = nearbyEnemies.GetRandomElement().transform;
+                GameObject tempNeedle = trobbioPrefab.InstantiateAsset();
+                tempNeedle.name = "NeedolinArsenal.TrobbioFirework";
+                tempNeedle.transform.SetPositionX(transform.position.x);
+                tempNeedle.transform.SetPositionY(transform.position.y);
+                UnityEngine.Object.Destroy(tempNeedle.GetComponent<TestGameObjectActivator>());
+
+                // Reduce damage dealt to about 50%
+                GameObject trobbioFlash = tempNeedle.transform.Find("Trobbio_dazzle_flash").gameObject;
+                GameObject damager = trobbioFlash.transform.Find("hero_dazzle_flash_damager").gameObject;
+                DamageEnemies damageEnemies = damager.GetComponent<DamageEnemies>();
+                damageEnemies.damageDealt /= 2;
             }
         }
         #endregion

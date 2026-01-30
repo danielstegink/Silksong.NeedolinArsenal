@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Silksong.AssetHelper.ManagedAssets;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace NeedolinArsenal.Helpers
@@ -11,7 +12,9 @@ namespace NeedolinArsenal.Helpers
         Voltvessel,
         Lifeblood,
         Lantern,
-        PinBadge
+        PinBadge,
+        Trobbio1,
+        Trobbio2,
     }
 
     public static class MusicToolHelper
@@ -21,6 +24,7 @@ namespace NeedolinArsenal.Helpers
         /// </summary>
         public static MusicTool? chosenTool;
 
+        #region Audio Clips
         /// <summary>
         /// Metal music clip; played when Voltvessel chosen
         /// </summary>
@@ -40,6 +44,17 @@ namespace NeedolinArsenal.Helpers
         /// Shimasen music clip; played when Pin Badge chosen
         /// </summary>
         public static AudioClip? shimasenClip;
+
+        /// <summary>
+        /// Stores the Trobbio OST
+        /// </summary>
+        internal static ManagedAsset<AudioClip>? trobbioAsset;
+
+        /// <summary>
+        /// Trobbio music clip; played when Claw Mirror(s) chosen
+        /// </summary>
+        internal static AudioClip? trobbioClip;
+        #endregion
 
         /// <summary>
         /// Gets a list of all music-altering tools equipped
@@ -69,6 +84,16 @@ namespace NeedolinArsenal.Helpers
                 musicTools.Add(MusicTool.PinBadge);
             }
 
+            if (equippedTools.Contains("Dazzle Bind"))
+            {
+                musicTools.Add(MusicTool.Trobbio1);
+            }
+
+            if (equippedTools.Contains("Dazzle Bind Upgraded"))
+            {
+                musicTools.Add(MusicTool.Trobbio2);
+            }
+
             return musicTools;
         }
 
@@ -84,6 +109,8 @@ namespace NeedolinArsenal.Helpers
                 MusicTool.Voltvessel => metalClip,
                 MusicTool.Lantern => countryClip,
                 MusicTool.Lifeblood => jazzClip,
+                MusicTool.Trobbio1 => trobbioClip,
+                MusicTool.Trobbio2 => trobbioClip,
                 _ => shimasenClip
             };
         }

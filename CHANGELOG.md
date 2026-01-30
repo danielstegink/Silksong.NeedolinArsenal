@@ -1,4 +1,13 @@
 # Changelog
+## 2.0.0
+- New tool synergy: Claw Mirror(s)
+- AssetBundle loader replaced with AssetHelper
+- Synergies rebalanced
+	- Plasmium Phial frequency reduced
+	- Wispfire Lantern frequency reduced
+	- Pin Badge damage increased, but damage stacking bug removed
+- Non-critical error logs disabled
+
 ## 1.0.1
 - Disabled excess logging
 

@@ -1,15 +1,15 @@
 # Needolin Arsenal
-About 2 months after the game came out, I saw an 
-animated short in which Hornet attached the Voltvessel
-to her Needolin and turned it into an electric guitar 
-that plays rock music and shoots laser beams. I 
-thought to myself, "I can make that".
+About 2 months after the game came out, I saw an animated 
+short in which Hornet attached the Voltvessel to her 
+Needolin and turned it into an electric guitar that plays 
+rock music and shoots laser beams. I thought to myself, 
+"I can make that".
 
-This mod gives the Needolin combat potential by 
-applying new synergies based on equipped tools. If one
-or more of the following is equipped, the mod will 
-randomly pick one, then play its assigned music clip 
-and apply its designated effect:
+This mod gives the Needolin combat potential by applying 
+new synergies based on equipped tools. If one or more of 
+the following is equipped, the mod will randomly pick one,
+and then play its assigned music clip and apply its 
+designated effect:
 - Voltvessels wrap the Silk in lightning, causing the
 Needolin to play rock music and spawn lightning bolts 
 around Hornet like Trobbio fireworks.
@@ -22,6 +22,9 @@ when enemies are nearby.
 - Pin Badge sharpens the Silk into blades, causing the
 Needolin to play traditional Japanese shamisen music 
 and spawn Cross Slashes on nearby enemies.
+- Claw Mirror(s) reflects light off the Silk, causing the
+Needolin to play Trobbio's OST and produce fireworks on
+nearby enemies.
 - Spider Strings reduces the cooldown of Needolin 
 Arsenal, allowing the above effects to occur more 
 frequently.

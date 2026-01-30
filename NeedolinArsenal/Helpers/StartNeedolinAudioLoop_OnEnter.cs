@@ -1,8 +1,8 @@
-﻿using HarmonyLib;
+﻿using DanielSteginkUtils.Helpers;
+using HarmonyLib;
 using HutongGames.PlayMaker.Actions;
 using System.Collections.Generic;
 using UnityEngine;
-using DanielSteginkUtils.Helpers;
 
 namespace NeedolinArsenal.Helpers
 {

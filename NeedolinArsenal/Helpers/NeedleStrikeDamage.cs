@@ -16,8 +16,12 @@ namespace NeedolinArsenal.Helpers
             }
 
             // The attack uses sharpened silk, making it a spell attack
-            HealthManager enemy = other.gameObject.GetComponent<HealthManager>();
-            DamageEnemy.DealDamage(enemy, PlayerData.instance.nailDamage / 4, AttackTypes.Spell, gameObject);
+            try
+            {
+                HealthManager enemy = other.gameObject.GetComponent<HealthManager>();
+                DamageEnemy.DealDamage(enemy, PlayerData.instance.nailDamage / 2, AttackTypes.Spell, gameObject);
+            }
+            catch { } // Chance enemy will die before damage occurs; don't need to do anything in that case
         }
     }
 }

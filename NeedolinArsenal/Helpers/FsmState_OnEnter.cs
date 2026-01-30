@@ -1,7 +1,8 @@
 ﻿using HarmonyLib;
 using HutongGames.PlayMaker;
+using Silksong.AssetHelper.ManagedAssets;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace NeedolinArsenal.Helpers
 {
@@ -11,6 +12,12 @@ namespace NeedolinArsenal.Helpers
         [HarmonyPostfix]
         public static void Postfix(FsmState __instance)
         {
+            if (__instance.name.Equals("Try Needolin") &&
+                MusicToolHelper.trobbioClip == null)
+            {
+                GameManager.instance.StartCoroutine(LoadTrobbioMusic());
+            }
+
             // If we stop playing the regular Needolin, stop the arsenal
             if (StopArsenal(__instance.Name))
             {
@@ -25,6 +32,31 @@ namespace NeedolinArsenal.Helpers
                 //NeedolinArsenal.Instance.Log("Re-enabling effects loop");
                 ArsenalEffects.StartArsenal();
             }
+        }
+
+        /// <summary>
+        /// Loads Trobbio's OST via AssetHelper
+        /// </summary>
+        /// <returns></returns>
+        private static IEnumerator LoadTrobbioMusic()
+        {
+            // Verify the prefab is not null
+            if (MusicToolHelper.trobbioAsset == null)
+            {
+                NeedolinArsenal.Instance.Log($"Trobbio prefab not stored");
+                yield break;
+            }
+
+            // Load the prefab
+            MusicToolHelper.trobbioAsset.Load();
+            yield return MusicToolHelper.trobbioAsset.Handle;
+            if (MusicToolHelper.trobbioAsset.Handle.OperationException != null)
+            {
+                NeedolinArsenal.Instance.Log($"Error loading asset: {MusicToolHelper.trobbioAsset.Handle.OperationException}");
+                yield break;
+            }
+
+            MusicToolHelper.trobbioClip = MusicToolHelper.trobbioAsset.InstantiateAsset();
         }
 
         /// <summary>
